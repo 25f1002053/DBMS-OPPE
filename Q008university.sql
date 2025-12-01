@@ -7,4 +7,5 @@ SELECT
 FROM
     instructor i
 JOIN department d ON d.dept_name = i.dept_name
-WHERE building IN ('Taylor', 'Main', 'Lambeau');
+WHERE 
+    building IN ('Taylor', 'Main', 'Lambeau');
