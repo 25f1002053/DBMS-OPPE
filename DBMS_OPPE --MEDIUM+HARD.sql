@@ -232,3 +232,102 @@ WHERE
 			c.category_name = 'Electronics'
 	);
 
+-- 5 mark problems
+
+/*
+1. Find title and doi of books issued by students whose first_name ends with 'a' and from department 'Mechanical Engineering' or 'Computer Science'
+*/
+
+SELECT DISTINCT
+	title,
+	doi
+FROM
+	book_issue bi
+JOIN book_copies bc ON bc.accession_no = bi.accession_no
+JOIN book_catalogue b ON b.isbn_no = bc.isbn_no
+JOIN members m ON m.member_no = bi.member_no AND m.member_class = 'Student'
+JOIN students s ON s.roll_no = m.roll_no
+JOIN departments d ON d.department_code = s.department_code
+WHERE
+	department_name IN ('Mechanical Engineering', 'Computer Science') AND
+	student_fname LIKE '%a';
+
+/*
+2. Write an SQL Query to find name and dob of the assistant_referee_2 of the match between 'all Star' and 'Amigos' on '2020-05-17'
+*/
+
+SELECT
+	r.name,
+	dob
+FROM
+	referees r
+JOIN match_referees mr ON mr.assistant_referee_2 = r.referee_id
+JOIN matches m ON m.match_num = mr.match_num
+JOIN teams t1 ON t1.team_id = m.host_team_id
+JOIN teams t2 ON t2.team_id = m.guest_team_id
+WHERE
+	match_date = '2020-05-17' AND
+	(t1.name = 'All Stars' AND t2.name = 'Amigos') OR
+	(t1.name = 'Amigos' AND t2.name = 'All Stars');
+
+/*
+3. Write a SQL query to find the title, date of issue (doi) of the books issued by the students whose first name starts with 'S' and from departments 'Mechanical Engineering' or Computer Science'
+*/
+
+SELECT DISTINCT
+	title,
+	doi
+FROM
+	book_issue bi
+JOIN book_copies bc ON bc.accession_no = bi.accession_no
+JOIN book_catalogue b ON b.isbn_no = bc.isbn_no
+JOIN members m ON m.member_no = bi.member_no
+JOIN students s ON s.roll_no = m.roll_no
+JOIN departments d ON d.department_code = s.department_code
+WHERE
+	department_name IN ('Mechanical Engineering', 'Computer Science') AND
+	student_fname LIKE 'S%';
+
+/*
+4. Write an SQL query to find the team names that have never lost a match (as a host or as a guest)
+*/
+
+SELECT
+	name
+FROM
+	teams t
+WHERE
+	NOT EXISTS (
+		SELECT
+			*
+		FROM
+			matches m
+		WHERE
+			host_team_id = t.team_id AND
+			host_team_score < guest_team_score
+	) AND
+	NOT EXISTS (
+		SELECT
+			*
+		FROM
+			matches m
+		WHERE
+			guest_team_id = t.team_id AND
+			guest_team_score < host_team_score
+	);
+
+/*
+5. Write a SQL statement to find the player name, jersey no of player and team name of players who played for teams that hosted matches in 2020 and also had a jersey number less than 10
+*/
+
+SELECT DISTINCT
+	p.name,
+	jersey_no,
+	t.name
+FROM
+	players p
+JOIN teams t ON p.team_id = t.team_id
+JOIN matches m ON m.host_team_id = t.team_id
+WHERE
+	match_date BETWEEN '2020-01-01' AND '2020-12-31' AND
+	jersey_no < 10;
