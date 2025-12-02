@@ -118,3 +118,73 @@ FROM
 	product
 WHERE
 	product_name LIKE '%____b';
+
+/*
+11. Write an SQL query to find the titles of the book, that were published after 2005 and author's first name is 'Subrata' and lastname is 'Saha'
+*/
+
+SELECT
+	title
+FROM
+	book_catalogue bc
+JOIN book_authors ba ON ba.isbn_no = bc.isbn_no
+WHERE
+	year > 2005 AND
+	author_fname = 'Subrata' AND
+	author_lname = 'Saha';
+
+/*
+12. Write an SQL query to find the referee_id, number of matches conducted by referee 'Tony Joseph Louis'
+*/
+
+SELECT
+	referee,
+	count(*)
+FROM
+	match_referees mr
+JOIN referees r ON r.referee_id = mr.referee
+WHERE
+	name = 'Tony Joseph Louis'
+GROUP BY referee;
+
+/*
+13. Write an SQL query to find the titles and publishers of books where the title contains the word ‘Python’. Display title and publisher name
+*/
+
+SELECT
+	title,
+	publisher
+FROM
+	book_catalogue
+WHERE
+	title LIKE '%Python%';
+
+/*
+14. Write an SQL query to find the name of the host team that played a match on '2020-05-15'
+*/
+
+SELECT
+	name
+FROM
+	matches m
+JOIN teams t ON t.team_id = m.host_team_id
+WHERE
+	match_date = '2020-05-15';
+
+/*
+15. Write an SQL query to find the names of users who have never placed an order
+*/
+
+SELECT
+	user_name
+FROM
+	users u
+WHERE
+	NOT EXISTS (
+		SELECT
+			*
+		FROM
+			orders o
+		WHERE
+			o.user_id = u.user_id
+	);
