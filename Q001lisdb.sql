@@ -31,3 +31,40 @@ WHERE
 			m.member_class = 'Faculty' AND
 			m.id = f.id
 	);
+
+/*
+Write an SQL statement to find the titles of books authored by an author having first name as 'Joh Paul' and last name as 'Mueller'
+*/
+
+SELECT
+	title
+FROM
+	book_catalogue b
+NATURAL JOIN book_authors ba
+WHERE
+	ba.author_fname = 'Joh Paul' AND
+	ba.author_lname = 'Mueller';
+
+/*
+Write a SQL statement to find the titles of books published by 'McGraw Hill Education'
+*/
+
+SELECT
+	title
+FROM
+	book_catalogue
+WHERE
+	publisher = 'McGraw Hill Education';
+
+/*
+Write a SQL statement to display the first name and the last name of students (student_fname, student_lname) pursuing 'PG' courses
+*/
+
+SELECT
+	student_fname,
+	student_lname
+FROM
+	students s
+NATURAL JOIN members
+WHERE
+	member_type = 'PG';
